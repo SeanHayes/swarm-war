@@ -1,0 +1,20 @@
+Swarm War CMS
+
+This project is social game engine for Facebook (like Mafia Wars) written for the Django web framework. It provides resuable apps that you can mix and match and build on top of.
+
+= License =
+This project is released under a GNU Affero lincense (AGPL), a copyleft open source license.
+
+2 important caveats of this license are:
+* You must license any of your own code which is based on this project under the AGPL to anyone who accesses your service.
+* You must provide a copy of this project's source to your users.
+
+If you would like to use this project as the basis for a game without opensourcing all of your own code, you can contact me to purchase a propietary license.
+
+= Project Dependencies =
+
+= Install =
+
+= Reference Implementations =
+
+

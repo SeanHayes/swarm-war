@@ -1,0 +1,53 @@
+{% extends "core/base.html" %}
+{% block content %}
+<h2>Refill</h2>
+<div id="refill">
+	<form method="POST" action="{% url refill 'energy' %}">
+		{% csrf_token %}
+		<input type="submit" value="Refill Energy for {{ refill_data.energy }} Credits" />
+	</form>
+	<form method="POST" action="{% url refill 'stamina' %}">
+		{% csrf_token %}
+		<input type="submit" value="Refill Stamina for {{ refill_data.stamina }} Credits" />
+	</form>
+	<form method="POST" action="{% url refill 'health' %}">
+		{% csrf_token %}
+		<input type="submit" value="Refill Health for {{ refill_data.health }} Credits" />
+	</form>
+</div>
+<h2>Store</h2>
+<div id="items">
+{% for c_name, objects in class_list %}
+{% if objects|length > 0 %}
+	<h3>{{ c_name }}</h3>
+	{% for object in objects %}
+		<div class="item">
+			<h4 class="name">{{ object.name }}</h4>
+			<p class="description">{{ object.description }}</p>
+			{% with object.get_attributes_display_list as attributes_display_list %}
+			{% if attributes_display_list|length > 0 %}
+			<ul>
+			{% for tup in attributes_display_list %}
+				<li{% if tup.2 %} title="{{ tup.2 }}"{% endif %}>{{ tup.0 }}: {{ tup.1 }}</li>
+			{% endfor %}
+			</ul>
+			{% endif %}
+			{% endwith %}
+			{% if object.image %}
+			<img src="{{ object.image.url }}" height="108px" alt="{{ object.image_alt }}" />
+			{% endif %}
+			<div class="buy_item">
+				<form method="POST" action="{% url buy object.id %}">
+					<p>
+						{% csrf_token %}
+						{{ buy_form }}
+						<input type="submit" value="Buy Item | {% if object.price %}${{ object.price }}{% endif %}{% if object.price and object.credit_price %} and {% endif %}{% if object.credit_price %}{{ object.credit_price }} Credit{{ object.credit_price|pluralize }}{% endif %} Each"/>
+					</p>
+				</form>
+			</div>
+		</div>
+	{% endfor %}
+{% endif %}
+{% endfor %}
+</div>
+{% endblock content %}

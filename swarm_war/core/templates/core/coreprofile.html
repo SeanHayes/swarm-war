@@ -1,0 +1,29 @@
+{% extends "core/base.html" %}
+{% block content %}
+<h2>{{ object.user }}'s Profile</h2>
+<div id="coreprofile">
+	<h3>Experience</h3>
+	<p>{{ object.experience }} (Level {{ object.get_experience_level }})</p>
+	
+	<h3>Attributes</h3>
+	{% if owns_profile %}<p>You have {{ object.attribute_points }} attribute points you can use to increase your skills.</p>{% endif %}
+	<ul>
+	{% for field, value in object.get_attribute_fields.iteritems %}
+	<li class="{{ field }}">{{ field|capfirst }}: {{ value }}
+	{% if can_skill_up_1 %}
+		<form style="display:inline;" method="POST" action="{% url skill_up field 1 %}">
+			{% csrf_token %}
+			<input value="+1" type="submit"/>
+		</form>
+		{% if can_skill_up_5 %}
+		<form style="display:inline;" method="POST" action="{% url skill_up field 5 %}">
+			{% csrf_token %}
+			<input value="+5" type="submit"/>
+		</form>
+		{% endif %}
+	{% endif %}
+	</li>
+	{% endfor %}
+	</ul>
+</div>
+{% endblock content %}owns_profile

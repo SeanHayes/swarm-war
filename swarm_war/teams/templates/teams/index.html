@@ -1,0 +1,11 @@
+{% extends "teams/base.html" %}
+{% block content %}
+<h2>Teams</h2>
+<ul id="teams">
+{% for object in object_list %}
+	<li class="team"><a href="{% url teams_view object.id %}">{{ object.name }}</a></li>
+{% empty %}
+	There are no teams.
+{% endfor %}
+</ul>
+{% endblock content %}

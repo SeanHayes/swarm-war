@@ -1,0 +1,45 @@
+{% extends "missions/base.html" %}
+{% block content %}
+<h2>Chapters</h2>
+<ul id="areas">
+	{% for area in area_list %}
+	<li{% if area.id == current_area_id %} id="current_area"{% endif %}><a href="{% url area_view area.id %}">{{ area.name }}</a></li>
+	{% endfor %}
+</ul>
+<h2>Missions</h2>
+<div id="missions">
+{% for object in object_list %}
+	<div class="mission">
+		<h3 class="name">{{object.item.name}}</h3>
+		<div class="description">{{object.item.description|safe}}</div>
+		<ul class="attribute_requirements">
+			<li>Energy: {% if object.energy >= 0 %}+{% endif %}{{ object.energy }}</li>
+			<li>Health: {% if object.health >= 0 %}+{% endif %}{{ object.health }}</li>
+			<li>Experience: {% if object.experience >= 0 %}+{% endif %}{{ object.experience }}</li>
+			<li>Money: {% if object.money >= 0 %}+{% endif %}${{ object.money }}</li>
+		</ul>
+		{% if object.item.image %}
+		<img src="{{object.item.image.url}}" width="{{object.item.image.width}}px" height="{{object.item.image.height}}px" alt="{{object.item.image_alt}}" />
+		{% endif %}
+		<p>
+			<span class="progress">Progress: {{ object.percent_progress }}%</span>
+			<br />
+			<span class="tier">Tier: {{ object.tier }}</span>
+		</p>
+		<div class="do_mission">
+			<form method="POST" action="{% url missions_do_mission object.item.mission.id %}">{% csrf_token %}<input type="submit" value="Do Mission | {{ object.energy }} Energy Required"/></form>
+		</div>
+		{% if object.item.mission.triggers.all %}
+		<div class="rewards">
+			<h4>Possible Rewards</h4>
+			{% for mt in object.item.mission.triggers.all %}
+				<div>{{ mt.as_leaf_class.html }}</div>
+			{% endfor %}
+		</div>
+		{% endif %}
+	</div>
+{% empty %}
+	You have no missions in this area unlocked.
+{% endfor %}
+</div>
+{% endblock content %}

@@ -1,0 +1,23 @@
+{% extends "battles/base.html" %}
+{% block content %}
+<h2>Battles</h2>
+<div id="battles">
+{% for object in object_list %}
+	<div>
+		{{object.user.first_name}} {{object.user.last_name}} | {{object.experience}} | <form method="POST" action="{% url attack_user object.user.id %}">
+			{% csrf_token %}
+			<input type="submit" value="Attack" />
+		</form>
+	</div>
+{% empty %}
+	There are no opponents to battle with.
+{% endfor %}
+</div>
+<div id="battlerecords">
+{% for battlerecord in battlerecords %}
+	<div>{{battlerecord}}</div>
+{% empty %}
+	You have no recent battle records.
+{% endfor %}
+</div>
+{% endblock content %}

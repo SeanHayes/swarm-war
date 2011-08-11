@@ -1,0 +1,41 @@
+{% extends "core/base.html" %}
+{% block content %}
+<h2>Inventory</h2>
+<div id="items">
+{% for c_name, objects in class_list %}
+	<h3>{{ c_name }}</h3>
+	{% for object in objects %}
+		<div class="item">
+			<h4 class="name">{{object.item.name}}</h4>
+			<p class="description">{{object.item.description}}</p>
+			<p class="quantity">You own {{object.quantity}} of this item.</p>
+			{% with object.get_attributes_display_list as attributes_display_list %}
+			{% if attributes_display_list|length > 0 %}
+			<ul>
+			{% for tup in attributes_display_list %}
+				<li{% if tup.2 %} title="{{ tup.2 }}"{% endif %}>{{ tup.0 }}: {{ tup.1 }}</li>
+			{% endfor %}
+			</ul>
+			{% endif %}
+			{% endwith %}
+			{% if object.item.image %}
+			<img src="{{object.item.image.url}}" width="{{object.item.image.width}}px" height="{{object.item.image.height}}px" alt="{{object.item.image_alt}}" />
+			{% endif %}
+			{% if object.item.price and object.item.credit_price == 0 %}
+			<div class="sell_item">
+				<form method="POST" action="{% url sell object.id %}">
+					<p>
+						{% csrf_token %}
+						{{ sell_form }}
+						<input type="submit" value="Sell Item | {{object.item.sell_price}} Money Each"/>
+					</p>
+				</form>
+			</div>
+			{% endif %}
+		</div>
+	{% empty %}
+		You have no items of this type.
+	{% endfor %}
+{% endfor %}
+</div>
+{% endblock content %}

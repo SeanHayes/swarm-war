@@ -1,0 +1,52 @@
+#authorized but not logged into Django
+DEBUG 2011-07-07 01:34:56,308 22868 140717601670912 swarm_war.core.views:65 canvas() Canvas was POSTed to
+DEBUG 2011-07-07 01:34:56,308 22868 140717601670912 swarm_war.core.views:66 canvas() User: AnonymousUser
+DEBUG 2011-07-07 01:34:56,308 22868 140717601670912 swarm_war.core.views:67 canvas() Here's what Facebook sent us:
+{
+	u'user_id': u'000000000000000',
+	u'algorithm': u'HMAC-SHA256',
+	u'expires': 0,
+	u'oauth_token': u'00000000000000000000000000000000000000000000000000000000000000000000000000000000000000',
+	u'user': {
+		u'locale': u'en_US',
+		u'country': u'us',
+		u'age': {
+			u'min': 21}
+		},
+	u'issued_at': 1310016866
+}
+
+#deauthorized and not logged into Django
+DEBUG 2011-07-07 01:38:20,244 22954 140064139089664 swarm_war.core.views:65 canvas() Canvas was POSTed to
+DEBUG 2011-07-07 01:38:20,244 22954 140064139089664 swarm_war.core.views:66 canvas() User: AnonymousUser
+DEBUG 2011-07-07 01:38:20,244 22954 140064139089664 swarm_war.core.views:67 canvas() Here's what Facebook sent us:
+{
+	u'issued_at': 1310017072,
+	u'user': {
+		u'locale': u'en_US',
+		u'country': u'us',
+		u'age': {
+			u'min': 21
+		}
+	},
+	u'algorithm': u'HMAC-SHA256'
+}
+
+#authorized and logged into Django
+DEBUG 2011-07-07 01:38:36,223 22954 140064139089664 swarm_war.core.views:65 canvas() Canvas was POSTed to
+DEBUG 2011-07-07 01:38:36,223 22954 140064139089664 swarm_war.core.views:66 canvas() User: John Savage
+DEBUG 2011-07-07 01:38:36,223 22954 140064139089664 swarm_war.core.views:67 canvas() Here's what Facebook sent us:
+{
+	u'user_id': u'000000000000000',
+	u'algorithm': u'HMAC-SHA256',
+	u'expires': 0,
+	u'oauth_token': u'00000000000000000000000000000000000000000000000000000000000000000000000000000000000000',
+	u'user': {
+		u'locale': u'en_US',
+		u'country': u'us',
+		u'age': {
+			u'min': 21
+		}
+	},
+	u'issued_at': 1310017089
+}

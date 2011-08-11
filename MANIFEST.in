@@ -1,0 +1,4 @@
+include swarm_war/*/templates/*/*
+include swarm_war_test_project/templates/*
+include LICENSE
+include README

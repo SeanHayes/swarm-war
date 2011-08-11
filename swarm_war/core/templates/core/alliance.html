@@ -1,0 +1,37 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<h2>Alliance Members</h2>
+<p>
+	Invite your friends to increase your strength in fights!
+</p>
+{% if object_list %}
+<ol id="allies">
+{% for object in object_list %}
+	<li class="ally"><a href="{% url coreprofile object.user.id %}">{{object.user.username}}</a></li>
+{% endfor %}
+</ol>
+{% else %}
+You have no allies.
+{% endif %}
+{% endblock content %}
+{% block js_bottom %}
+<script type="text/javascript">
+FB.ui(
+	{
+		method: 'apprequests',
+		message: '{{ invite_message }}',
+		data: ''
+	},
+	function(response){
+		console.debug(response)
+		$.ajax({
+			type: 'POST',
+			url: '{% url store_alliance_request_ids %}',
+			data: $.toJSON(response.request_ids),
+			contentType: 'text/json'
+		})
+	}
+);
+</script>
+{% endblock js_bottom %}

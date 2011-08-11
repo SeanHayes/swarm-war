@@ -1,0 +1,20 @@
+{% extends "leaderboard/base.html" %}
+
+{% block title %}Leaderboard{% endblock title %}
+
+{% block content %}
+<div id="leaderboard">
+{% for category, qs in leaderboard.iteritems %}
+	{% with qs|slice:slice_str as qs %}
+	{% if qs|length == num_top_users %}
+	<h3>{% if enable_category_pages %}<a href="{% url leaderboard_view category %}">{% endif %}{{ category }}{% if enable_category_pages %}</a>{% endif %}</h3>
+	<ul>
+	{% for user in qs %}
+		<li><a href="{% url coreprofile user.id %}">{{ user }}</a>: {{ user.relevant_value|default_if_none:0 }}</li>
+	{% endfor %}
+	</ul>
+	{% endif %}
+	{% endwith %}
+{% endfor %}
+</div>
+{% endblock content %}

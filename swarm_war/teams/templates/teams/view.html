@@ -1,0 +1,61 @@
+{% extends "teams/base.html" %}
+
+{% block extra_head %}
+{% if can_invite %}
+<script type="text/javascript">
+function invite(){
+FB.ui(
+	{
+		method: 'apprequests',
+		message: '{{ invite_message }}',
+		data: ''
+	},
+	function(response){
+		console.debug(response.request_ids)
+		$.ajax({
+			type: 'POST',
+			url: '{% url teams_store_request_ids object.id %}',
+			data: $.toJSON(response.request_ids),
+			contentType: 'text/json'
+		})
+	}
+);
+}
+$().ready(function(){
+	$('#invite_button').click(invite)
+})
+</script>
+{% endif %}
+{% endblock extra_head %}
+
+{% block content %}
+{% with object.get_leader as leader %}
+<h2>Team: {{ object.name }}</h2>
+{% if can_invite %}
+<p><button id="invite_button" type="button">Invite More Members</button></p>
+{% endif %}
+<p>Max team size is {{ MAX_TEAM_SIZE }} members.</p>
+<p>{% if leader %}Leader: {{ leader }}{% else %}<form method="POST" action="{% url teams_become_leader %}">
+	{% csrf_token %}
+	<input type="submit" value="Become Leader" />
+</form>{% endif %}</p>
+<ul id="members">
+{% for member in members %}
+	<li class="member"><a href="{% url coreprofile member.user.id %}">{{ member.user.username }}</a>{% if member.leader %} (Leader){% endif %}{% if leader == user %} <form method="POST" action="{% url teams_kick_out member.user.id %}">
+	{% csrf_token %}
+	<input type="submit" value="Kick Out" />
+</form>{% endif %}</li>
+{% empty %}
+	There are no team members.
+{% endfor %}
+</ul>
+{% if on_team %}
+<p><form method="POST" action="{% url teams_leave %}"><input type="submit" value="Leave Team" /></form></p>
+{% endif %}
+{% if members|length >= MAX_TEAM_SIZE %}
+	<p>Team is full.</p>
+{% endif %}
+
+{% endwith %}
+{% endblock content %}
+

@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}" xml:lang="{{ LANGUAGE_CODE }}" lang="{{ LANGUAGE_CODE }}">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>{% if current_site.name %}{{ current_site.name }} : {% endif %}{% block title %}{% endblock %}</title>
+	{% block extra_head %}{% endblock %}
+</head>
+<body>{% block body %}
+<div id="page">
+	<div id="header">
+	{% block header %}
+		<div id="account_stuff">
+			{% if user.is_authenticated %}
+			{% if user.is_staff %}
+			<a href="{% url admin:index %}">Admin</a> | {% endif %}
+			<!-- Stats -->
+			{% with user.coreprofile as profile %}
+			<ul id="stats">
+				<li>Health: {{ profile.health|default:"0" }}/{{ profile.max_health|default:"0" }} <form style="display:inline;" method="post" action="{% url heal %}?next={{request.path|urlencode}}"><input value="(Heal)" type="submit"/></form>{% if health_tick_time_remaining %}
+					More in <span class="time_countdown">{{health_tick_time_remaining}}</span>s{% endif %}</li></li>
+				<li>Energy: {{ profile.energy|default:"0" }}/{{ profile.max_energy|default:"0" }}{% if energy_tick_time_remaining %}
+					More in <span class="time_countdown">{{energy_tick_time_remaining}}</span>s{% endif %}</li>
+				<li>Stamina: {{ profile.stamina|default:"0" }}/{{ profile.max_stamina|default:"0" }}{% if stamina_tick_time_remaining %}
+					More in <span class="time_countdown">{{stamina_tick_time_remaining}}</span>s{% endif %}</li></li>
+				<li>Money: {{ profile.money|default:"0" }}</li>
+				<li>Experience: {{ profile.experience|default_if_none:"0" }} (Level {{ profile.get_experience_level }}){% if leveled_up %} Leveled Up!{% endif %}</li>
+			</ul>
+			{% endwith %}
+			{% endif %}
+		</div>
+		<!-- Messages -->
+		{% if messages %}
+		<ul class="messages">
+			{% for message in messages %}
+			<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+		<!-- Navigation -->
+		<ul id="nav">
+			<li><a href="{% url my_coreprofile %}">Profile</a></li>
+			<li><a href="{% url area_index %}">Missions</a></li>
+			<li><a href="{% url battles_index %}">Battles</a></li>
+			<li><a href="{% url inventory %}">Inventory</a></li>
+			<li><a href="{% url collections %}">Collections</a></li>
+			<li><a href="{% url store %}">Store</a></li>
+			<li><a href="{% url alliance %}">Alliance</a></li>
+			<li><a href="{% url credits_index %}">Credits</a></li>
+			<li><a href="{% url leaderboard_index %}">Leaderboard</a></li>
+		</ul>
+	{% endblock header %}
+	</div>
+	<div id="content">
+	{% block content %}{% endblock content %}
+	</div>
+	<div id="footer">
+	{% block footer %}{% endblock footer %}
+	</div>
+</div>
+<div id="fb-root"></div>
+<script src="http://connect.facebook.net/en_US/all.js"></script>
+<script>
+FB.init({
+	appId  : FACEBOOK_APP_ID,
+	status : true, // check login status
+	cookie : true, // enable cookies to allow the server to access the session
+	xfbml  : true  // parse XFBML
+});
+</script>
+{% block js_bottom %}{% endblock js_bottom %}
+{% endblock body %}</body>
+</html>

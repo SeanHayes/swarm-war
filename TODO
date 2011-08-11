@@ -1,0 +1,5 @@
+global item drops
+test csrf: https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#testing
+add tests
+fix bug that causes swarm_war.teams.tests.test_urls.ViewMyTeamTestCase.test_not_on_team to fail due to html escaping (which shouldn't be happening)
+

@@ -1,0 +1,58 @@
+{% extends "credits/base.html" %}
+{% block content %}
+<h2>Credits</h2>
+<p>Credits can be used to buy items or to refill energy, health, etc. in the <a href="{% url store %}">store</a>.</p>
+{% for object in object_list %}
+<div id="listing_{{ object.id }}" class="listing">
+	<h3 class="title">{{ object.get_title }}</h3>
+	<p class="description">{{ object.get_description }}</p>
+	<form class="listing_form" onsubmit="return false;">
+		<input type="hidden" name="id" value="{{ object.id }}" />
+		<input type="submit" value="Buy" />
+	</form>
+</div>
+{% empty %}
+	There are no listings.
+{% endfor %}
+{% endblock content %}
+
+{% block js_bottom %}
+<script>
+
+function placeOrder()
+{
+	// Assign an internal ID that points to a database record
+	var order_info = $('input[name="id"]', this).val();
+	console.debug('id='+order_info)
+	
+	// calling the API ...
+	var obj = {
+		method: 'pay',
+		order_info: order_info,
+		purchase_type: 'item'
+	};
+	
+	FB.ui(obj, callback);
+	return false;
+}
+
+var callback = function(data)
+{
+	if (data['order_id'])
+	{
+		return true;
+	}
+	else
+	{
+		//handle errors here
+		return false;
+	}
+};
+
+
+$(document).ready(function()
+{
+	$('.listing_form').submit(placeOrder)
+});
+</script>
+{% endblock js_bottom %}

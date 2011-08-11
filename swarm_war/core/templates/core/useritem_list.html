@@ -1,0 +1,24 @@
+{% extends "core/base.html" %}
+{% block content %}
+<h2>Inventory</h2>
+<div id="items">
+{% for object in object_list %}
+	<div class="item">
+		<h3 class="name">{{object.item.name}}</h3>
+		<div class="description">{{object.item.description}}</div>
+		<div class="quantity">You own {{object.quantity}} of this item.</div>
+		{% if object.item.attack or object.item.defense %}
+		<ul>
+			{% if object.item.attack %}<li>Attack: {{object.item.attack}}</li>{% endif %}
+			{% if object.item.defense %}<li>Defense: {{object.item.defense}}</li>{% endif %}
+		</ul>
+		{% endif %}
+		{% if object.item.image %}
+		<img src="{{object.item.image.url}}" width="{{object.item.image.width}}px" height="{{object.item.image.height}}px" alt="{{object.item.image_alt}}" />
+		{% endif %}
+	</div>
+{% empty %}
+	Your inventory is empty.
+{% endfor %}
+</div>
+{% endblock content %}

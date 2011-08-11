@@ -1,0 +1,26 @@
+{% extends "collections/base.html" %}
+{% block content %}
+<h2>Collections</h2>
+<div id="collections">
+{% for object in object_list %}
+	<div class="collection">
+		<h3 class="name">{{object.name}}</h3>
+		Prize: {{object.prize.name}}
+		{% for collectionitem in object.collectionitem_set.all %}
+		<div class="quantity">{{collectionitem.quantity}} of {{collectionitem.item.name}} are required, you have {% if collectionitem.item.id in useritem_quantities %}{% for k, v in useritem_quantities.items %}{% ifequal k collectionitem.item.id %}{{ v }}{% endifequal %}{% endfor %}{% else %}0{% endif %}.</div>
+			{% if collectionitem.item.image %}
+			<img src="{{collectionitem.item.image.url}}" width="{{collectionitem.item.image.width}}px" height="{{collectionitem.item.image.height}}px" alt="{{collectionitem.item.image_alt}}" />
+			{% endif %}
+		{% endfor %}
+		{% if object.id in can_redeem %}
+			<form style="display:inline;" method="POST" action="{% url redeem_collection object.id %}">
+				{% csrf_token %}
+				<input value="Redeem" type="submit"/>
+			</form>
+		{% endif %}
+	</div>
+{% empty %}
+	There are no collections.
+{% endfor %}
+</div>
+{% endblock content %}
