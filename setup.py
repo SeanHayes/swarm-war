@@ -44,6 +44,7 @@ setup(name='swarm-war',
 	],
 	keywords='django facebook game engine',
 	url='http://seanhayes.name/',
+	download_url='https://github.com/SeanHayes/swarm-war',
 	package_dir={'util': os.path.join(test_package_name, 'apps', 'util')},
 	packages=[
 		'swarm_war',
